@@ -14,8 +14,8 @@ A throwaway Pangolin Community instance used to develop and verify Burrow agains
 
 ```sh
 sudo docker compose up -d                          # core stack
-sudo docker compose -f docker-compose.newt.yml up -d   # live site peers
-sudo docker compose -f docker-compose.olm.yml up -d    # live client
+sudo docker compose -f docker-compose.newt.yml --env-file .env up -d   # live site peers
+sudo docker compose -f docker-compose.olm.yml --env-file .env up -d    # live client
 sudo docker compose stop                           # pause, keep state
 ```
 
