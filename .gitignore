@@ -1,0 +1,10 @@
+/target
+web/js/
+web/node_modules/
+dev/.env
+dev/config/config.yml
+dev/config/db/
+dev/config/key
+dev/config/traefik/
+dev/config/letsencrypt/
+*.swp
