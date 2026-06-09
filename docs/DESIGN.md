@@ -44,8 +44,9 @@ The daemon serves the static assets itself, so the whole thing is one binary and
 
 A single binary. Configuration by environment variable, no config file for the common case:
 
-- `PANGOLIN_API_URL`: base URL of the integration API (for example `https://api.example.com/v1`).
-- `PANGOLIN_API_KEY`: the read key.
+- `PANGOLIN_API_URL`: base URL of the integration API (for example `http://pangolin:3003/v1`).
+- `PANGOLIN_API_TOKEN`: the composite key, `<apiKeyId>.<apiKeySecret>` (see PHASE0-FINDINGS.md).
+- `PANGOLIN_ORG_ID`: the org to draw; org-scoped keys cannot list orgs, so Burrow is told.
 - `GERBIL_METRICS_URL`: gerbil's Prometheus endpoint (for example `http://gerbil:3004/metrics`). Optional; absent means topology-only (Phase 1 mode).
 - `BURROW_POLL_INTERVAL`: seconds between polls. Default 10, matching gerbil's own ~10s metric refresh.
 - `BURROW_LISTEN`: bind address. Default `0.0.0.0:2700`.
@@ -75,7 +76,7 @@ Node types:
 
 Edge types:
 
-- `peer`: a WireGuard tunnel: hub to site, hub to client. Carries health (this is the link that can be up or down, fast or slow).
+- `peer`: a WireGuard tunnel. Hub to site always; client to the site(s) it connects through per the API's client-site association, falling back to hub to client when the association is empty (amended per PHASE0-FINDINGS.md finding 6). Carries health (this is the link that can be up or down, fast or slow).
 - `serves`: a site to the resources behind it. Structural.
 - `grant`: a client to a resource it's allowed to reach. Structural; the answer to "what can this client touch."
 

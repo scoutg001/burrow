@@ -6,7 +6,19 @@ Pangolin's dashboard shows the mesh as tables. Burrow shows it as the graph it a
 
 ## Status
 
-Design and Phase 0 (API verification) complete; the topology renderer is under construction. See `docs/DESIGN.md` for the architecture and `docs/PHASE0-FINDINGS.md` for what the Pangolin integration API and gerbil's metrics endpoint actually expose, verified against a live Community stack on 2026-06-09.
+Phase 1 (the topology map) works end to end: the daemon polls the integration API and the page renders the live force-directed graph with online state. Liveness streaming (SSE) and traffic overlays are next; see `docs/DESIGN.md` for the architecture and `docs/PHASE0-FINDINGS.md` for what Pangolin's integration API and gerbil's metrics actually expose, verified against a live Community stack on 2026-06-09.
+
+## Running it
+
+1. Enable the integration API in pangolin's `config.yml` (`flags: enable_integration_api: true`; it listens on port 3003).
+2. Create an org API key in the dashboard (Server Admin, API Keys) and grant it the read actions: `getOrg, listSites, getSite, listClients, getClient, listSiteResources, getSiteResource, listResources, getResource`.
+3. Run the burrow container next to pangolin (see `deploy/docker-compose.snippet.yml`) with `PANGOLIN_API_URL`, `PANGOLIN_API_TOKEN` (`<apiKeyId>.<apiKeySecret>`), and `PANGOLIN_ORG_ID` set.
+4. Open port 2700: pan, zoom, drag to pin, click a node for details.
+
+## Developing
+
+- Daemon: `cargo test`, then `cargo run` with the three `PANGOLIN_*` variables pointed at a dev stack (`dev/README.md` describes the throwaway Pangolin Community stack used for development).
+- Web page: `cd web && npm install && npm run check` (tsc build plus Node test-runner tests). The page is plain TypeScript compiled by `tsc`; d3-force is vendored in `web/vendor/` (see `VENDOR.md` there).
 
 ## Shape
 
