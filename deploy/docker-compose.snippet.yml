@@ -1,0 +1,24 @@
+# Add burrow to an existing Pangolin deployment: drop this service into the
+# stack (or run it standalone with `docker compose -f` pointing at the same
+# network). It needs only network reach to the pangolin container and an
+# integration-API key.
+services:
+  burrow:
+    image: ghcr.io/scoutg001/burrow:latest   # or build: from this repo
+    container_name: burrow
+    restart: unless-stopped
+    environment:
+      # The integration API: enable flags.enable_integration_api in
+      # pangolin's config.yml; default port 3003.
+      - PANGOLIN_API_URL=http://pangolin:3003/v1
+      # Composite token: "<apiKeyId>.<apiKeySecret>" from an org API key
+      # granted the read actions (see README).
+      - PANGOLIN_API_TOKEN=${BURROW_API_TOKEN}
+      - PANGOLIN_ORG_ID=${BURROW_ORG_ID}
+    ports:
+      - "127.0.0.1:2700:2700"
+    networks:
+      - pangolin
+networks:
+  pangolin:
+    external: true
