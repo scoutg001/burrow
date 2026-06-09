@@ -1,0 +1,175 @@
+{
+    "data": {
+        "siteResources": [
+            {
+                "siteResourceId": 2,
+                "orgId": "burrow-dev",
+                "niceId": "reflecting-great-plains-rat-snake",
+                "name": "alpha-print",
+                "mode": "host",
+                "ssl": false,
+                "scheme": null,
+                "proxyPort": null,
+                "destinationPort": 7125,
+                "destination": "10.10.0.5",
+                "enabled": true,
+                "alias": "alpha-print.burrow.internal",
+                "aliasAddress": "100.90.129.9",
+                "tcpPortRangeString": "*",
+                "udpPortRangeString": "*",
+                "disableIcmp": false,
+                "authDaemonMode": "site",
+                "authDaemonPort": 22123,
+                "subdomain": null,
+                "domainId": null,
+                "fullDomain": null,
+                "networkId": 2,
+                "defaultNetworkId": null,
+                "siteNames": [
+                    "den-alpha"
+                ],
+                "siteNiceIds": [
+                    "horrible-asiatic-brush-tailed-porcupine"
+                ],
+                "siteIds": [
+                    1
+                ],
+                "siteAddresses": [
+                    "100.90.128.0"
+                ],
+                "siteOnlines": [
+                    true
+                ]
+            },
+            {
+                "siteResourceId": 1,
+                "orgId": "burrow-dev",
+                "niceId": "agitated-ords-kangaroo-rat",
+                "name": "alpha-ssh",
+                "mode": "host",
+                "ssl": false,
+                "scheme": null,
+                "proxyPort": null,
+                "destinationPort": 22,
+                "destination": "127.0.0.1",
+                "enabled": true,
+                "alias": "alpha-ssh.burrow.internal",
+                "aliasAddress": "100.90.129.8",
+                "tcpPortRangeString": "*",
+                "udpPortRangeString": "*",
+                "disableIcmp": false,
+                "authDaemonMode": "site",
+                "authDaemonPort": 22123,
+                "subdomain": null,
+                "domainId": null,
+                "fullDomain": null,
+                "networkId": 1,
+                "defaultNetworkId": null,
+                "siteNames": [
+                    "den-alpha"
+                ],
+                "siteNiceIds": [
+                    "horrible-asiatic-brush-tailed-porcupine"
+                ],
+                "siteIds": [
+                    1
+                ],
+                "siteAddresses": [
+                    "100.90.128.0"
+                ],
+                "siteOnlines": [
+                    true
+                ]
+            },
+            {
+                "siteResourceId": 4,
+                "orgId": "burrow-dev",
+                "niceId": "major-richardsons-ground-squirrel",
+                "name": "bravo-cam",
+                "mode": "host",
+                "ssl": false,
+                "scheme": null,
+                "proxyPort": null,
+                "destinationPort": 8080,
+                "destination": "10.20.0.9",
+                "enabled": true,
+                "alias": "bravo-cam.burrow.internal",
+                "aliasAddress": "100.90.129.11",
+                "tcpPortRangeString": "*",
+                "udpPortRangeString": "*",
+                "disableIcmp": false,
+                "authDaemonMode": "site",
+                "authDaemonPort": 22123,
+                "subdomain": null,
+                "domainId": null,
+                "fullDomain": null,
+                "networkId": 4,
+                "defaultNetworkId": null,
+                "siteNames": [
+                    "den-bravo"
+                ],
+                "siteNiceIds": [
+                    "specific-sandhill-frog"
+                ],
+                "siteIds": [
+                    2
+                ],
+                "siteAddresses": [
+                    "100.90.128.1"
+                ],
+                "siteOnlines": [
+                    true
+                ]
+            },
+            {
+                "siteResourceId": 3,
+                "orgId": "burrow-dev",
+                "niceId": "third-lesser-antillean-iguana",
+                "name": "bravo-ssh",
+                "mode": "host",
+                "ssl": false,
+                "scheme": null,
+                "proxyPort": null,
+                "destinationPort": 22,
+                "destination": "127.0.0.1",
+                "enabled": true,
+                "alias": "bravo-ssh.burrow.internal",
+                "aliasAddress": "100.90.129.10",
+                "tcpPortRangeString": "*",
+                "udpPortRangeString": "*",
+                "disableIcmp": false,
+                "authDaemonMode": "site",
+                "authDaemonPort": 22123,
+                "subdomain": null,
+                "domainId": null,
+                "fullDomain": null,
+                "networkId": 3,
+                "defaultNetworkId": null,
+                "siteNames": [
+                    "den-bravo"
+                ],
+                "siteNiceIds": [
+                    "specific-sandhill-frog"
+                ],
+                "siteIds": [
+                    2
+                ],
+                "siteAddresses": [
+                    "100.90.128.1"
+                ],
+                "siteOnlines": [
+                    true
+                ]
+            }
+        ],
+        "pagination": {
+            "total": 4,
+            "pageSize": 20,
+            "page": 1
+        }
+    },
+    "success": true,
+    "error": false,
+    "message": "Site resources retrieved successfully",
+    "status": 200
+}

@@ -1,0 +1,20 @@
+{
+    "data": {
+        "clients": [
+            {
+                "clientId": 2,
+                "name": "wanderer-two",
+                "subnet": "100.90.128.3/24"
+            },
+            {
+                "clientId": 3,
+                "name": "wanderer-three",
+                "subnet": "100.90.128.4/24"
+            }
+        ]
+    },
+    "success": true,
+    "error": false,
+    "message": "Site resource clients retrieved successfully",
+    "status": 200
+}

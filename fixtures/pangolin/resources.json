@@ -1,0 +1,14 @@
+{
+    "data": {
+        "resources": [],
+        "pagination": {
+            "total": 0,
+            "pageSize": 20,
+            "page": 1
+        }
+    },
+    "success": true,
+    "error": false,
+    "message": "Resources retrieved successfully",
+    "status": 200
+}

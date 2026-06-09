@@ -1,0 +1,15 @@
+{
+    "data": {
+        "clients": [
+            {
+                "clientId": 1,
+                "name": "wanderer-one",
+                "subnet": "100.90.128.2/24"
+            }
+        ]
+    },
+    "success": true,
+    "error": false,
+    "message": "Site resource clients retrieved successfully",
+    "status": 200
+}

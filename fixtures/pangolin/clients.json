@@ -1,0 +1,107 @@
+{
+    "data": {
+        "clients": [
+            {
+                "clientId": 1,
+                "orgId": "burrow-dev",
+                "name": "wanderer-one",
+                "pubKey": "6CqhUZswlrEcOEuheakldzJuMYoDGhg5M9X3njmbeVI=",
+                "subnet": "100.90.128.2/24",
+                "megabytesIn": null,
+                "megabytesOut": null,
+                "orgName": "Burrow Dev",
+                "type": "olm",
+                "online": true,
+                "olmVersion": "1.5.0",
+                "userId": null,
+                "username": null,
+                "userEmail": null,
+                "niceId": "pointed-anisolabis-maritima",
+                "agent": "Olm CLI",
+                "approvalState": null,
+                "olmArchived": false,
+                "archived": false,
+                "blocked": false,
+                "sites": [
+                    {
+                        "siteId": 1,
+                        "siteName": "den-alpha",
+                        "siteNiceId": "horrible-asiatic-brush-tailed-porcupine"
+                    }
+                ]
+            },
+            {
+                "clientId": 3,
+                "orgId": "burrow-dev",
+                "name": "wanderer-three",
+                "pubKey": null,
+                "subnet": "100.90.128.4/24",
+                "megabytesIn": null,
+                "megabytesOut": null,
+                "orgName": "Burrow Dev",
+                "type": "olm",
+                "online": false,
+                "olmVersion": null,
+                "userId": null,
+                "username": null,
+                "userEmail": null,
+                "niceId": "accomplished-plains-spadefoot-toad",
+                "agent": null,
+                "approvalState": null,
+                "olmArchived": false,
+                "archived": false,
+                "blocked": false,
+                "sites": [
+                    {
+                        "siteId": 2,
+                        "siteName": "den-bravo",
+                        "siteNiceId": "specific-sandhill-frog"
+                    }
+                ]
+            },
+            {
+                "clientId": 2,
+                "orgId": "burrow-dev",
+                "name": "wanderer-two",
+                "pubKey": null,
+                "subnet": "100.90.128.3/24",
+                "megabytesIn": null,
+                "megabytesOut": null,
+                "orgName": "Burrow Dev",
+                "type": "olm",
+                "online": false,
+                "olmVersion": null,
+                "userId": null,
+                "username": null,
+                "userEmail": null,
+                "niceId": "luminous-tarbagan-marmot",
+                "agent": null,
+                "approvalState": null,
+                "olmArchived": false,
+                "archived": false,
+                "blocked": false,
+                "sites": [
+                    {
+                        "siteId": 1,
+                        "siteName": "den-alpha",
+                        "siteNiceId": "horrible-asiatic-brush-tailed-porcupine"
+                    },
+                    {
+                        "siteId": 2,
+                        "siteName": "den-bravo",
+                        "siteNiceId": "specific-sandhill-frog"
+                    }
+                ]
+            }
+        ],
+        "pagination": {
+            "total": 3,
+            "page": 1,
+            "pageSize": 20
+        }
+    },
+    "success": true,
+    "error": false,
+    "message": "Clients retrieved successfully",
+    "status": 200
+}

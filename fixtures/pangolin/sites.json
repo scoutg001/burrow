@@ -1,0 +1,57 @@
+{
+    "data": {
+        "sites": [
+            {
+                "siteId": 1,
+                "niceId": "horrible-asiatic-brush-tailed-porcupine",
+                "name": "den-alpha",
+                "pubKey": "MqWETYYS4zqOvUvqS2d32oWsBZB4TRzdYx1DBbbIOhg=",
+                "subnet": "100.89.128.8/30",
+                "megabytesIn": 0.001483917236328125,
+                "megabytesOut": 0.002773284912109375,
+                "orgName": "Burrow Dev",
+                "type": "newt",
+                "online": true,
+                "address": "100.90.128.0",
+                "newtVersion": "1.12.5",
+                "exitNodeId": 1,
+                "exitNodeName": "Exit Node D0wdN3wI",
+                "exitNodeEndpoint": "gerbil",
+                "remoteExitNodeId": null,
+                "resourceCount": 2,
+                "status": "approved",
+                "newtUpdateAvailable": false
+            },
+            {
+                "siteId": 2,
+                "niceId": "specific-sandhill-frog",
+                "name": "den-bravo",
+                "pubKey": "9dASgbvtCb3S65XzLcqKNRmwBPQATvUcDEear7QNJGg=",
+                "subnet": "100.89.128.4/30",
+                "megabytesIn": 0.00139617919921875,
+                "megabytesOut": 0.00260162353515625,
+                "orgName": "Burrow Dev",
+                "type": "newt",
+                "online": true,
+                "address": "100.90.128.1",
+                "newtVersion": "1.12.5",
+                "exitNodeId": 1,
+                "exitNodeName": "Exit Node D0wdN3wI",
+                "exitNodeEndpoint": "gerbil",
+                "remoteExitNodeId": null,
+                "resourceCount": 2,
+                "status": "approved",
+                "newtUpdateAvailable": false
+            }
+        ],
+        "pagination": {
+            "total": 2,
+            "pageSize": 20,
+            "page": 1
+        }
+    },
+    "success": true,
+    "error": false,
+    "message": "Sites retrieved successfully",
+    "status": 200
+}

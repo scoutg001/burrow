@@ -1,0 +1,26 @@
+{
+    "data": {
+        "org": {
+            "orgId": "burrow-dev",
+            "name": "Burrow Dev",
+            "subnet": "100.90.128.0/24",
+            "utilitySubnet": "100.90.129.0/24",
+            "createdAt": "2026-06-09T19:19:58.471Z",
+            "requireTwoFactor": null,
+            "maxSessionLengthHours": null,
+            "passwordExpiryDays": null,
+            "settingsLogRetentionDaysRequest": 7,
+            "settingsLogRetentionDaysAccess": 0,
+            "settingsLogRetentionDaysAction": 0,
+            "settingsLogRetentionDaysConnection": 0,
+            "sshCaPrivateKey": "U2FsdGVkX1/WeYP7t3WVQOtEd/V4Q25QxaNnHC+DSnMbYwStFrPDuqJSV7JZ0zmV3LEeo191CZiftCpgVDib9mdsXQIQunhiVDJHxc40qd6nrYRtQn3o8tpAZRBL1q9LN9ZSx4+i7AjdeSxFzIrHhPDEUMWbS8uadE5l3Q0j6vzpKEJKwREkb0tjCDCISyyP",
+            "sshCaPublicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDs+agc6vQ/GCyJcpkKZPi0wsVgToXWIUswECqqLTlLo pangolin-ssh-ca-burrow-dev",
+            "isBillingOrg": null,
+            "billingOrgId": null
+        }
+    },
+    "success": true,
+    "error": false,
+    "message": "Organization retrieved successfully",
+    "status": 200
+}
