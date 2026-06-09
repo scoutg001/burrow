@@ -6,10 +6,12 @@
 //! `TopologyCollector` trait is the test seam: `FixtureTopology` feeds the
 //! same bytes the HTTP collector would, with no network.
 
-use std::collections::BTreeMap;
+#[cfg(test)]
 use std::path::{Path, PathBuf};
 
-use anyhow::{Context, Result};
+#[cfg(test)]
+use anyhow::Context;
+use anyhow::Result;
 use serde::Deserialize;
 
 /// Every integration-API response wraps its payload in this envelope.
@@ -21,9 +23,6 @@ pub struct Envelope<T> {
 #[derive(Debug, Deserialize)]
 pub struct Pagination {
     pub total: u64,
-    #[serde(rename = "pageSize")]
-    pub page_size: u64,
-    pub page: u64,
 }
 
 #[derive(Debug, Deserialize)]
@@ -34,6 +33,7 @@ pub struct OrgData {
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Org {
+    #[allow(dead_code)] // read by tests; the wire field documents the shape
     pub org_id: String,
     pub name: String,
 }
@@ -50,13 +50,19 @@ pub struct Site {
     pub site_id: i64,
     pub name: String,
     /// WireGuard public key; equals the `peer` label on gerbil's metrics.
+    /// Unused until Phase 3 joins byte counters onto peer edges.
+    #[allow(dead_code)]
     pub pub_key: Option<String>,
     pub subnet: Option<String>,
     pub address: Option<String>,
     pub online: bool,
+    /// API-side traffic totals; the Phase 3 client-link rate source.
+    #[allow(dead_code)]
     pub megabytes_in: Option<f64>,
+    #[allow(dead_code)]
     pub megabytes_out: Option<f64>,
     #[serde(rename = "type")]
+    #[allow(dead_code)]
     pub site_type: Option<String>,
 }
 
@@ -77,10 +83,13 @@ pub struct ClientSiteRef {
 pub struct Client {
     pub client_id: i64,
     pub name: String,
+    #[allow(dead_code)] // Phase 3 join key
     pub pub_key: Option<String>,
     pub subnet: Option<String>,
     pub online: bool,
+    #[allow(dead_code)] // Phase 3 client-link rates
     pub megabytes_in: Option<f64>,
+    #[allow(dead_code)]
     pub megabytes_out: Option<f64>,
     /// The site(s) this client connects through. Olm clients peer with
     /// sites, not the hub (Phase 0 finding 6).
@@ -143,10 +152,12 @@ pub trait TopologyCollector: Send {
 
 /// Fixture-backed collector: reads the captured JSON files from a directory
 /// laid out like fixtures/pangolin/. The test double for HttpTopologyCollector.
+#[cfg(test)]
 pub struct FixtureTopology {
     dir: PathBuf,
 }
 
+#[cfg(test)]
 impl FixtureTopology {
     pub fn new(dir: impl AsRef<Path>) -> Self {
         Self { dir: dir.as_ref().to_path_buf() }
@@ -161,6 +172,7 @@ impl FixtureTopology {
     }
 }
 
+#[cfg(test)]
 impl TopologyCollector for FixtureTopology {
     fn collect(&self) -> Result<Topology> {
         let org: OrgData = self.read("org.json")?;
@@ -186,17 +198,6 @@ impl TopologyCollector for FixtureTopology {
             grants,
         })
     }
-}
-
-/// Stable ordering helper used by graph assembly and tests: grants grouped by
-/// site-resource id, then client id.
-pub fn sort_grants(grants: &mut [Grant]) {
-    grants.sort_by_key(|g| (g.site_resource_id, g.client_id));
-}
-
-/// Index sites by id (assembly needs the lookups).
-pub fn site_index(sites: &[Site]) -> BTreeMap<i64, &Site> {
-    sites.iter().map(|s| (s.site_id, s)).collect()
 }
 
 #[cfg(test)]

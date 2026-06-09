@@ -10,3 +10,4 @@ dev/config/letsencrypt/
 *.swp
 dev/config/openapi.yaml
 dev/config/logs/
+web/build/
