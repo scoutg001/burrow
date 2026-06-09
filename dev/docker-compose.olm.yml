@@ -1,0 +1,18 @@
+# Live olm client for wanderer-one (real client peer). Credentials come
+# from dev/.env (gitignored).
+services:
+  olm-wanderer-one:
+    image: fosrl/olm:latest
+    container_name: burrow-dev-olm-one
+    restart: unless-stopped
+    cap_add: [NET_ADMIN]
+    devices: ["/dev/net/tun:/dev/net/tun"]
+    environment:
+      - PANGOLIN_ENDPOINT=http://pangolin:3000
+      - OLM_ID=${OLM_wanderer_one_ID}
+      - OLM_SECRET=${OLM_wanderer_one_SECRET}
+    networks: [default]
+networks:
+  default:
+    external: true
+    name: burrow-dev

@@ -1,0 +1,45 @@
+# Burrow dev stack: throwaway Pangolin Community instance.
+# Derived from upstream docker-compose.example.yml (fosrl/pangolin@main,
+# fetched 2026-06-09) with traefik removed: this stack is for integration-API
+# and gerbil-metrics verification only, reached from localhost. All ports
+# bind to 127.0.0.1; WireGuard stays on the compose network (newt containers
+# join it directly).
+name: burrow-dev
+services:
+  pangolin:
+    image: fosrl/pangolin:latest
+    container_name: burrow-dev-pangolin
+    restart: unless-stopped
+    volumes:
+      - ./config:/app/config
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/v1/"]
+      interval: "3s"
+      timeout: "3s"
+      retries: 15
+    ports:
+      - "127.0.0.1:3000:3000"   # external API (newt/olm token fetches)
+      - "127.0.0.1:3002:3002"   # dashboard (Next.js)
+      - "127.0.0.1:3003:3003"   # integration API
+  gerbil:
+    image: fosrl/gerbil:latest
+    container_name: burrow-dev-gerbil
+    restart: unless-stopped
+    depends_on:
+      pangolin:
+        condition: service_healthy
+    command:
+      - --reachableAt=http://gerbil:3004
+      - --generateAndSaveKeyTo=/var/config/key
+      - --remoteConfig=http://pangolin:3001/api/v1/
+    volumes:
+      - ./config/:/var/config
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    ports:
+      - "127.0.0.1:3004:3004"   # metrics + gerbil API (scraped by burrow dev)
+networks:
+  default:
+    driver: bridge
+    name: burrow-dev

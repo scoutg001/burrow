@@ -8,3 +8,5 @@ dev/config/key
 dev/config/traefik/
 dev/config/letsencrypt/
 *.swp
+dev/config/openapi.yaml
+dev/config/logs/

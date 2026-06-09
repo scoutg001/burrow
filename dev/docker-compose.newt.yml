@@ -1,0 +1,26 @@
+# Live newt connectors for the two seeded dev sites, so gerbil has real
+# WireGuard peers. Credentials come from dev/.env (gitignored); see
+# dev/README.md for how they were generated.
+services:
+  newt-den-alpha:
+    image: fosrl/newt:latest
+    container_name: burrow-dev-newt-alpha
+    restart: unless-stopped
+    environment:
+      - PANGOLIN_ENDPOINT=http://pangolin:3000
+      - NEWT_ID=${NEWT_den_alpha_ID}
+      - NEWT_SECRET=${NEWT_den_alpha_SECRET}
+    networks: [default]
+  newt-den-bravo:
+    image: fosrl/newt:latest
+    container_name: burrow-dev-newt-bravo
+    restart: unless-stopped
+    environment:
+      - PANGOLIN_ENDPOINT=http://pangolin:3000
+      - NEWT_ID=${NEWT_den_bravo_ID}
+      - NEWT_SECRET=${NEWT_den_bravo_SECRET}
+    networks: [default]
+networks:
+  default:
+    external: true
+    name: burrow-dev
