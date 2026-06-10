@@ -5,7 +5,8 @@
 import type { Simulation, SimulationLinkDatum } from "d3-force";
 import type { GraphEdge } from "./types.js";
 import type { SimNode } from "./merge.js";
-import { chargeStrength, collisionRadius, linkDistance, linkStrength } from "./sim.js";
+import { chargeStrength, collisionRadius } from "./sim.js";
+import { linkDistance, linkStrength, type ViewMode } from "./view.js";
 
 export type D3Force = typeof import("d3-force");
 export type SimLink = SimulationLinkDatum<SimNode> & { edge: GraphEdge };
@@ -26,6 +27,7 @@ export function buildSimulation(
   links: SimLink[],
   cx: number,
   cy: number,
+  view: ViewMode = "network",
 ): Sim {
   return d3
     .forceSimulation<SimNode>(nodes)
@@ -38,8 +40,8 @@ export function buildSimulation(
       d3
         .forceLink<SimNode, SimLink>(links)
         .id((n) => n.id)
-        .distance((l) => linkDistance(l.edge.kind))
-        .strength((l) => linkStrength(l.edge.kind)),
+        .distance((l) => linkDistance(l.edge.kind, view))
+        .strength((l) => linkStrength(l.edge.kind, view)),
     );
 }
 
@@ -49,4 +51,16 @@ export function updateSimulation(sim: Sim, nodes: SimNode[], links: SimLink[]): 
   const link = sim.force("link") as ReturnType<D3Force["forceLink"]>;
   link.links(links as never);
   sim.alpha(0.3).restart();
+}
+
+/** Retune the link force for a different view; positions carry over so the
+ * layout morphs instead of resetting. */
+export function applyView(sim: Sim, view: ViewMode): void {
+  type LinkForce = {
+    distance: (f: (l: SimLink) => number) => LinkForce;
+    strength: (f: (l: SimLink) => number) => LinkForce;
+  };
+  const link = sim.force("link") as unknown as LinkForce;
+  link.distance((l) => linkDistance(l.edge.kind, view)).strength((l) => linkStrength(l.edge.kind, view));
+  sim.alpha(0.6).restart();
 }

@@ -45,3 +45,12 @@ html, body { height: 100%; background: #16161d; color: #c8c8d4;
 #panel .copy:hover code { color: #d8ecff; text-decoration: underline; }
 #panel .copy.copied code { color: #5fbf77; }
 #panel .copy.copied::after { content: " copied"; color: #5fbf77; font-size: 11px; }
+
+#views label { display: block; padding: 2px 0; cursor: pointer; }
+#views .hint { display: block; margin-left: 20px; color: #8a8a9a; font-size: 11px; }
+.line.arrow { position: relative; }
+.line.arrow::after { content: ""; position: absolute; right: -1px; top: -4px;
+  border-left: 6px solid #7d8ca3; border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent; }
+.line.serves.arrow::after { border-left-color: #55607a; }
+.line.grant.arrow::after { border-left-color: #46584a; }

@@ -1,6 +1,7 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
-import { chargeStrength, collisionRadius, linkDistance, linkStrength, nodeRadius } from "../src/sim.js";
+import { chargeStrength, collisionRadius, nodeRadius } from "../src/sim.js";
+import { linkDistance, linkStrength } from "../src/view.js";
 
 test("node radii order: hub > site > client > resource", () => {
   assert.ok(nodeRadius("hub") > nodeRadius("site"));
@@ -8,13 +9,13 @@ test("node radii order: hub > site > client > resource", () => {
   assert.ok(nodeRadius("client") > nodeRadius("resource"));
 });
 
-test("serves links are the shortest and strongest structure", () => {
-  assert.ok(linkDistance("serves") < linkDistance("peer"));
-  assert.ok(linkStrength("serves") > linkStrength("grant"));
+test("network view: serves links are the shortest and strongest structure", () => {
+  assert.ok(linkDistance("serves", "network") < linkDistance("peer", "network"));
+  assert.ok(linkStrength("serves", "network") > linkStrength("grant", "network"));
 });
 
-test("grant links barely pull so the layout stays a tree", () => {
-  assert.ok(linkStrength("grant") < 0.1);
+test("network view: grant links barely pull so the layout stays a tree", () => {
+  assert.ok(linkStrength("grant", "network") < 0.1);
 });
 
 test("collision radius exceeds the visual radius for every kind", () => {

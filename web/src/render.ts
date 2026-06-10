@@ -50,3 +50,40 @@ export function labelAlpha(kind: NodeKind, zoom: number): number {
   if (zoom <= threshold) return 0;
   return Math.min(1, (zoom - threshold) * 2.5);
 }
+
+/** Only the semantically directed edges get arrowheads: serves (site to
+ * resource) and grant (client may reach resource). A WireGuard peer link is
+ * bidirectional; an arrow there would mislead. */
+export function isDirected(kind: GraphEdge["kind"]): boolean {
+  return kind === "serves" || kind === "grant";
+}
+
+export interface Arrow {
+  tip: { x: number; y: number };
+  left: { x: number; y: number };
+  right: { x: number; y: number };
+}
+
+/** Arrowhead triangle for an edge from (x1,y1) to (x2,y2), its tip resting
+ * on the target node's rim (targetRadius back from the center). Returns
+ * null for degenerate zero-length edges. */
+export function arrowhead(
+  x1: number, y1: number, x2: number, y2: number,
+  targetRadius: number, size: number,
+): Arrow | null {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const len = Math.hypot(dx, dy);
+  if (len < 1e-6) return null;
+  const ux = dx / len;
+  const uy = dy / len;
+  const tip = { x: x2 - ux * targetRadius, y: y2 - uy * targetRadius };
+  const bx = tip.x - ux * size;
+  const by = tip.y - uy * size;
+  const half = size * 0.55;
+  return {
+    tip,
+    left: { x: bx - uy * half, y: by + ux * half },
+    right: { x: bx + uy * half, y: by - ux * half },
+  };
+}

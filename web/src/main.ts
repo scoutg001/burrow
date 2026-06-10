@@ -5,12 +5,13 @@
 import * as d3force from "d3-force";
 
 import { fetchGraph } from "./api.js";
-import { buildSimulation, updateSimulation, type Sim, type SimLink } from "./forces.js";
+import { applyView, buildSimulation, updateSimulation, type Sim, type SimLink } from "./forces.js";
 import { hitTest, screenToWorld, zoomAround, type Transform } from "./interact.js";
 import { mergeNodes, type SimNode } from "./merge.js";
 import { renderPanel } from "./panel.js";
-import { BG, LABEL, PALETTE, edgeColor, edgeDash, edgeWidth, labelAlpha, nodeAlpha, nodeColor } from "./render.js";
+import { BG, LABEL, PALETTE, arrowhead, edgeColor, edgeDash, edgeWidth, isDirected, labelAlpha, nodeAlpha, nodeColor } from "./render.js";
 import { renderStats } from "./sidebar.js";
+import { edgeViewAlpha, type ViewMode } from "./view.js";
 import { nodeRadius } from "./sim.js";
 import type { GraphModel } from "./types.js";
 
@@ -29,6 +30,7 @@ let sim: Sim | null = null;
 let view: Transform = { x: 0, y: 0, k: 1 };
 let selected: string | null = null;
 let lastPollAt: number | null = null;
+let viewMode: ViewMode = "network";
 
 function refreshStats(): void {
   stats.innerHTML = renderStats(model, lastPollAt === null ? null : Date.now() - lastPollAt);
@@ -53,7 +55,7 @@ function applyModel(next: GraphModel): void {
   nodes = mergeNodes(nodes, next);
   links = makeLinks(next, nodes);
   if (!sim) {
-    sim = buildSimulation(d3force, nodes, links, canvas.clientWidth / 2, canvas.clientHeight / 2);
+    sim = buildSimulation(d3force, nodes, links, canvas.clientWidth / 2, canvas.clientHeight / 2, viewMode);
     view = { x: 0, y: 0, k: 1 };
   } else {
     updateSimulation(sim, nodes, links);
@@ -82,6 +84,7 @@ function draw(): void {
     const s = l.source as SimNode;
     const t = l.target as SimNode;
     if (s.x === undefined || t.x === undefined) continue;
+    ctx.globalAlpha = edgeViewAlpha(l.edge.kind, viewMode);
     ctx.strokeStyle = edgeColor(l.edge);
     ctx.lineWidth = edgeWidth(l.edge) / view.k;
     ctx.setLineDash(edgeDash(l.edge).map((d) => d / view.k));
@@ -89,8 +92,22 @@ function draw(): void {
     ctx.moveTo(s.x!, s.y!);
     ctx.lineTo(t.x!, t.y!);
     ctx.stroke();
+    if (isDirected(l.edge.kind)) {
+      const a = arrowhead(s.x!, s.y!, t.x!, t.y!, nodeRadius(t.kind) + 2 / view.k, 7 / view.k);
+      if (a) {
+        ctx.setLineDash([]);
+        ctx.fillStyle = edgeColor(l.edge);
+        ctx.beginPath();
+        ctx.moveTo(a.tip.x, a.tip.y);
+        ctx.lineTo(a.left.x, a.left.y);
+        ctx.lineTo(a.right.x, a.right.y);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
   }
   ctx.setLineDash([]);
+  ctx.globalAlpha = 1;
 
   for (const n of nodes) {
     if (n.x === undefined) continue;
@@ -215,6 +232,14 @@ window.addEventListener("keydown", (ev) => {
     selected = null;
     panel.innerHTML = "";
   }
+});
+
+document.querySelectorAll<HTMLInputElement>('input[name="view"]').forEach((input) => {
+  input.addEventListener("change", () => {
+    if (!input.checked) return;
+    viewMode = input.value as ViewMode;
+    if (sim) applyView(sim, viewMode);
+  });
 });
 
 // The legend's node swatches take their colors from the renderer's palette,

@@ -15,6 +15,14 @@
   <aside id="sidebar">
     <section id="stats"></section>
 
+    <section id="views">
+      <h2>View</h2>
+      <label><input type="radio" name="view" value="network" checked> network
+        <span class="hint">transport links shape the tree</span></label>
+      <label><input type="radio" name="view" value="access"> access
+        <span class="hint">grants shape the tree (ACL view)</span></label>
+    </section>
+
     <section id="legend">
       <h2>Legend</h2>
       <ul>
@@ -25,8 +33,8 @@
       </ul>
       <ul>
         <li><span class="line peer"></span> peer (WireGuard link)</li>
-        <li><span class="line serves"></span> serves (resource behind site)</li>
-        <li><span class="line grant"></span> grant (client may reach)</li>
+        <li><span class="line serves arrow"></span> serves (site &#9656; resource)</li>
+        <li><span class="line grant arrow"></span> grant (client &#9656; may reach)</li>
         <li><span class="swatch offline" data-kind="site"></span> dimmed = offline</li>
       </ul>
     </section>

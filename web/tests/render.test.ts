@@ -35,3 +35,19 @@ test("labels appear with zoom, structural nodes first", () => {
   assert.ok(labelAlpha("site", 0.8) > labelAlpha("resource", 0.8));
   assert.equal(labelAlpha("resource", 2.0), 1);
 });
+
+test("only serves and grant edges are directed", async () => {
+  const { isDirected } = await import("../src/render.js");
+  assert.ok(isDirected("serves"));
+  assert.ok(isDirected("grant"));
+  assert.ok(!isDirected("peer"));
+});
+
+test("arrowhead tip rests on the target rim, base spans behind it", async () => {
+  const { arrowhead } = await import("../src/render.js");
+  const a = arrowhead(0, 0, 100, 0, 10, 6)!;
+  assert.ok(Math.abs(a.tip.x - 90) < 1e-9 && Math.abs(a.tip.y) < 1e-9);
+  assert.ok(a.left.x < a.tip.x && a.right.x < a.tip.x, "base sits behind the tip");
+  assert.ok(Math.abs(a.left.y + a.right.y) < 1e-9, "base is symmetric about the edge");
+  assert.equal(arrowhead(5, 5, 5, 5, 10, 6), null, "degenerate edge");
+});
