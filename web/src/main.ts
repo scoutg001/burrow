@@ -2,25 +2,16 @@
 // handle pan/zoom/drag/click. All tunables and mappings live in the pure
 // modules; this file is the only one that touches d3 or the DOM.
 
-import {
-  forceCenter,
-  forceCollide,
-  forceLink,
-  forceManyBody,
-  forceSimulation,
-  type Simulation,
-  type SimulationLinkDatum,
-} from "d3-force";
+import * as d3force from "d3-force";
 
 import { fetchGraph } from "./api.js";
+import { buildSimulation, updateSimulation, type Sim, type SimLink } from "./forces.js";
 import { hitTest, screenToWorld, zoomAround, type Transform } from "./interact.js";
 import { mergeNodes, type SimNode } from "./merge.js";
 import { renderPanel } from "./panel.js";
 import { BG, LABEL, edgeColor, edgeDash, edgeWidth, labelAlpha, nodeAlpha, nodeColor } from "./render.js";
-import { chargeStrength, collisionRadius, linkDistance, linkStrength, nodeRadius } from "./sim.js";
-import type { GraphEdge, GraphModel } from "./types.js";
-
-type SimLink = SimulationLinkDatum<SimNode> & { edge: GraphEdge };
+import { nodeRadius } from "./sim.js";
+import type { GraphModel } from "./types.js";
 
 const POLL_MS = 10_000;
 
@@ -32,7 +23,7 @@ const ctx = canvas.getContext("2d")!;
 let model: GraphModel = { nodes: [], edges: [] };
 let nodes: SimNode[] = [];
 let links: SimLink[] = [];
-let sim: Simulation<SimNode, SimLink> | null = null;
+let sim: Sim | null = null;
 let view: Transform = { x: 0, y: 0, k: 1 };
 let selected: string | null = null;
 
@@ -55,22 +46,10 @@ function applyModel(next: GraphModel): void {
   nodes = mergeNodes(nodes, next);
   links = makeLinks(next, nodes);
   if (!sim) {
-    sim = forceSimulation<SimNode>(nodes)
-      .force("charge", forceManyBody<SimNode>().strength((n) => chargeStrength(n.kind)))
-      .force("center", forceCenter(canvas.clientWidth / 2, canvas.clientHeight / 2).strength(0.05))
-      .force("collide", forceCollide<SimNode>().radius((n) => collisionRadius(n.kind)))
-      .force(
-        "link",
-        forceLink<SimNode, SimLink>(links)
-          .id((n) => n.id)
-          .distance((l) => linkDistance(l.edge.kind))
-          .strength((l) => linkStrength(l.edge.kind)),
-      );
+    sim = buildSimulation(d3force, nodes, links, canvas.clientWidth / 2, canvas.clientHeight / 2);
     view = { x: 0, y: 0, k: 1 };
   } else {
-    sim.nodes(nodes);
-    (sim.force("link") as ReturnType<typeof forceLink<SimNode, SimLink>>).links(links);
-    sim.alpha(0.3).restart();
+    updateSimulation(sim, nodes, links);
   }
   if (selected && !nodes.some((n) => n.id === selected)) {
     selected = null;
