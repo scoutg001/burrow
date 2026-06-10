@@ -30,7 +30,12 @@ function relations(model: GraphModel, node: GraphNode): string[] {
 }
 
 export function renderPanel(model: GraphModel, node: GraphNode): string {
-  const addr = node.addresses.map((a) => `<li><code>${esc(a)}</code></li>`).join("");
+  // Addresses are copy chips: click puts the value on the clipboard (the
+  // delegated handler lives in main.ts). Copy, not hyperlink: mesh aliases
+  // resolve only inside the mesh, so an href would be a dead link here.
+  const addr = node.addresses
+    .map((a) => `<li><button class="copy" data-copy="${esc(a)}" title="copy"><code>${esc(a)}</code></button></li>`)
+    .join("");
   const rels = relations(model, node).map((r) => `<li>${r}</li>`).join("");
   const state = node.health.online ? "online" : "offline";
   return [

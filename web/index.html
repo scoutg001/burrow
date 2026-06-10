@@ -11,6 +11,39 @@
 </head>
 <body>
   <canvas id="graph"></canvas>
+
+  <aside id="sidebar">
+    <section id="stats"></section>
+
+    <section id="legend">
+      <h2>Legend</h2>
+      <ul>
+        <li><span class="swatch" data-kind="hub"></span> hub (Pangolin server)</li>
+        <li><span class="swatch" data-kind="site"></span> site (newt connector)</li>
+        <li><span class="swatch" data-kind="client"></span> client (olm)</li>
+        <li><span class="swatch" data-kind="resource"></span> resource</li>
+      </ul>
+      <ul>
+        <li><span class="line peer"></span> peer (WireGuard link)</li>
+        <li><span class="line serves"></span> serves (resource behind site)</li>
+        <li><span class="line grant"></span> grant (client may reach)</li>
+        <li><span class="swatch offline" data-kind="site"></span> dimmed = offline</li>
+      </ul>
+    </section>
+
+    <details id="help">
+      <summary>Controls</summary>
+      <dl>
+        <dt>drag canvas</dt><dd>pan</dd>
+        <dt>scroll</dt><dd>zoom at cursor</dd>
+        <dt>drag node</dt><dd>move and pin it</dd>
+        <dt>click node</dt><dd>details (unpins a pinned node)</dd>
+        <dt>click address</dt><dd>copy to clipboard</dd>
+        <dt>click empty / Esc</dt><dd>deselect</dd>
+      </dl>
+    </details>
+  </aside>
+
   <aside id="panel"></aside>
   <div id="status"></div>
   <script type="module" src="js/main.js"></script>

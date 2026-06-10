@@ -28,6 +28,11 @@ test("panel shows name, kind, state, addresses, and relations", () => {
   assert.match(html, /can reach alpha-ssh/);
 });
 
+test("addresses render as copy chips carrying their value", () => {
+  const html = renderPanel(model, model.nodes[1]);
+  assert.match(html, /<button class="copy" data-copy="alpha-ssh\.burrow\.internal"/);
+});
+
 test("relations read from the other side too", () => {
   const html = renderPanel(model, model.nodes[1]);
   assert.match(html, /reachable by wanderer-one/);

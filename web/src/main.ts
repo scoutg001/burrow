@@ -9,7 +9,8 @@ import { buildSimulation, updateSimulation, type Sim, type SimLink } from "./for
 import { hitTest, screenToWorld, zoomAround, type Transform } from "./interact.js";
 import { mergeNodes, type SimNode } from "./merge.js";
 import { renderPanel } from "./panel.js";
-import { BG, LABEL, edgeColor, edgeDash, edgeWidth, labelAlpha, nodeAlpha, nodeColor } from "./render.js";
+import { BG, LABEL, PALETTE, edgeColor, edgeDash, edgeWidth, labelAlpha, nodeAlpha, nodeColor } from "./render.js";
+import { renderStats } from "./sidebar.js";
 import { nodeRadius } from "./sim.js";
 import type { GraphModel } from "./types.js";
 
@@ -18,6 +19,7 @@ const POLL_MS = 10_000;
 const canvas = document.getElementById("graph") as HTMLCanvasElement;
 const panel = document.getElementById("panel") as HTMLElement;
 const status = document.getElementById("status") as HTMLElement;
+const stats = document.getElementById("stats") as HTMLElement;
 const ctx = canvas.getContext("2d")!;
 
 let model: GraphModel = { nodes: [], edges: [] };
@@ -26,6 +28,11 @@ let links: SimLink[] = [];
 let sim: Sim | null = null;
 let view: Transform = { x: 0, y: 0, k: 1 };
 let selected: string | null = null;
+let lastPollAt: number | null = null;
+
+function refreshStats(): void {
+  stats.innerHTML = renderStats(model, lastPollAt === null ? null : Date.now() - lastPollAt);
+}
 
 function resize(): void {
   const dpr = window.devicePixelRatio || 1;
@@ -176,19 +183,64 @@ canvas.addEventListener("wheel", (ev) => {
   view = zoomAround(view, ev.offsetX, ev.offsetY, factor);
 }, { passive: false });
 
+// Copy chips in the detail panel. clipboard.writeText needs a secure
+// context (https or localhost); the textarea fallback covers plain-http LAN
+// viewing.
+async function copyText(text: string): Promise<void> {
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand("copy");
+  ta.remove();
+}
+
+panel.addEventListener("click", (ev) => {
+  const btn = (ev.target as HTMLElement).closest("button.copy") as HTMLButtonElement | null;
+  if (!btn) return;
+  void copyText(btn.dataset.copy ?? "").then(() => {
+    btn.classList.add("copied");
+    setTimeout(() => btn.classList.remove("copied"), 1200);
+  });
+});
+
+window.addEventListener("keydown", (ev) => {
+  if (ev.key === "Escape") {
+    selected = null;
+    panel.innerHTML = "";
+  }
+});
+
+// The legend's node swatches take their colors from the renderer's palette,
+// so the two cannot drift apart.
+document.querySelectorAll<HTMLElement>(".swatch").forEach((el) => {
+  const kind = el.dataset.kind as keyof typeof PALETTE;
+  el.style.background = PALETTE[kind];
+});
+
 // --- boot -------------------------------------------------------------------
 
 async function poll(): Promise<void> {
   try {
     applyModel(await fetchGraph());
+    lastPollAt = Date.now();
     status.textContent = "";
   } catch (e) {
     status.textContent = e instanceof Error ? e.message : String(e);
   }
+  refreshStats();
 }
 
 window.addEventListener("resize", resize);
 resize();
 requestAnimationFrame(draw);
+refreshStats();
+setInterval(refreshStats, 1000);
 void poll();
 setInterval(() => void poll(), POLL_MS);
